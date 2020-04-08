@@ -1,0 +1,5 @@
+browser -> server POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server -> broswer 201 response with message JSON
+server --> browser - main.css
+browser -> server -- GET spa.js
+server -> broswer - main.js

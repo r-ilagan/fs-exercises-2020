@@ -1,0 +1,6 @@
+browser -> server HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+server - 302 URL redirect 
+browser -> server HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server --> browser - main.css
+browser -> server -- GET main.js
+server -> broswer - main.js
