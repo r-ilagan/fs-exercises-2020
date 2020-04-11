@@ -54,6 +54,7 @@ const App = (props) => {
     <div>
       <Display text="Anecdote of the day" />
       <p>{props.anecdotes[selected]}</p>
+      <p>has {points[selected]} votes</p>
       <Button handleClick={handlePoints} text="vote" />
       <Button
         handleClick={() =>
