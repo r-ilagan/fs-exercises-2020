@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+require('dotenv').config();
 
 const Weather = ({ capital }) => {
   const [weather, setWeather] = useState({});
@@ -16,7 +17,7 @@ const Weather = ({ capital }) => {
       });
   };
 
-  useEffect(getWeather, []);
+  useEffect(getWeather, [capital]);
   return (
     <div>
       <h3>Weather in {capital}</h3>
