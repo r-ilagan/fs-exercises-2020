@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Country from './components/Country';
+import Find from './components/Find';
 
-function App() {
+const App = () => {
+  const [countryList, setCountryList] = useState([]);
+  const [filter, setFilter] = useState('');
+
+  const restCountry = () => {
+    axios.get('https://restcountries.eu/rest/v2/all').then((response) => {
+      const countryList = response.data;
+      setCountryList(countryList);
+    });
+  };
+
+  useEffect(restCountry, []);
+
+  const handleFilter = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const handleOnClick = (event) => {
+    setFilter(event.target.value);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Find handleFilter={handleFilter} />
+      <Country
+        countryList={countryList}
+        filter={filter}
+        handleOnClick={handleOnClick}
+      />
     </div>
   );
-}
+};
 
 export default App;
