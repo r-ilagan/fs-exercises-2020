@@ -17,7 +17,18 @@ const addNewPerson = (makePerson) => {
   });
 };
 
+const removePerson = (id) => {
+  axios.delete(`${baseURL}/${id}`);
+};
+
+const changeNumber = (id, newNumber) => {
+  const request = axios.put(`${baseURL}/${id}`, newNumber);
+  return request.then((response) => response.data);
+};
+
 export default {
   getAllPersons,
   addNewPerson,
+  removePerson,
+  changeNumber,
 };
