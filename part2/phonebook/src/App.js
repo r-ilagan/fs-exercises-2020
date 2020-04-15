@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import personServices from './services/personServices';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -11,12 +11,9 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   const hook = () => {
-    console.log('effect started');
-
-    axios.get('http://localhost:3001/persons').then((response) => {
-      const note = response.data;
-      setPersons(note);
-      console.log('notes loaded', note.length, 'notes');
+    personServices.getAllPersons().then((people) => {
+      setPersons(people);
+      console.log('people loaded', people.length, 'people');
     });
   };
 
@@ -35,10 +32,14 @@ const App = () => {
       const makePerson = {
         name: newName,
         number: newNumber,
+        id: persons.length + 1,
       };
-      setPersons(persons.concat(makePerson));
-      setNewName('');
-      setNewNumber('');
+
+      personServices.addNewPerson(makePerson).then((person) => {
+        setPersons(persons.concat(person));
+        setNewName('');
+        setNewNumber('');
+      });
     }
   };
 
