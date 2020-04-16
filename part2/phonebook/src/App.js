@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import personService from './services/person';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 
@@ -9,6 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [message, setMessage] = useState(null);
+  const [isError, setIsError] = useState(false);
 
   const hook = () => {
     personService.getAllPersons().then((people) => {
@@ -41,6 +44,9 @@ const App = () => {
         setPersons(persons.concat(person));
         setNewName('');
         setNewNumber('');
+        setIsError(false);
+        setMessage(`Added ${person.name}`);
+        setTimeout(() => setMessage(null), 4000);
       });
     } else {
       if (
@@ -50,13 +56,30 @@ const App = () => {
       ) {
         const personToUpdate = persons.find((person) => person.id === id);
         const changes = { ...personToUpdate, number: newNumber };
-        personService.changeNumber(id, changes).then((updatedPerson) => {
-          setPersons(
-            persons.map((contact) =>
-              contact.id !== id ? contact : updatedPerson
-            )
-          );
-        });
+        personService
+          .changeNumber(id, changes)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((contact) =>
+                contact.id !== id ? contact : updatedPerson
+              )
+            );
+            setMessage(`Changed ${updatedPerson.name}'s number`);
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch((error) => {
+            setIsError(true);
+            setMessage(
+              `Information of ${personToUpdate.name} has already been removed from the server`
+            );
+            setTimeout(() => setMessage(null), 4000);
+            setNewName('');
+            setNewNumber('');
+            setPersons(
+              persons.filter((person) => person.id !== personToUpdate.id)
+            );
+          });
       }
     }
   };
@@ -85,6 +108,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} isError={isError} />
       <Filter handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
