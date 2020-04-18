@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 let persons = [
   {
     name: 'Arto Hellas',
@@ -24,6 +26,14 @@ let persons = [
   },
 ];
 
+const genId = () => {
+  const min = 10;
+  const max = 100000;
+  const id = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  return id;
+};
+
 app.get('/api/persons', (req, res) => {
   res.json(persons);
 });
@@ -43,6 +53,37 @@ app.get('/info', (req, res) => {
   res.send(
     `<p>Phonebook has info for ${persons.length} people<br />${new Date()}</p>`
   );
+});
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+
+  if (!body) {
+    return res.status(400).json({
+      error: 'content missing',
+    });
+  }
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: 'name or number is missing',
+    });
+  }
+
+  const nameTaken = persons.find((person) => person.name === body.name);
+  if (nameTaken) {
+    return res.status(404).json({
+      error: 'name already exists in the phonebook',
+    });
+  }
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: genId(),
+  };
+
+  persons = persons.concat(person);
+  res.json(persons);
 });
 
 app.delete('/api/persons/:id', (req, res) => {
