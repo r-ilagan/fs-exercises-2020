@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(
     ':method :url :status :req[content-length] :response-time ms - :res[content-length] :body'
   )
 );
+app.use(cors());
+app.use(express.static('build'));
 app.use(express.json());
 
 let persons = [
@@ -94,7 +97,7 @@ app.post('/api/persons', (req, res) => {
   };
 
   persons = persons.concat(person);
-  res.json(persons);
+  res.json(person);
 });
 
 app.delete('/api/persons/:id', (req, res) => {

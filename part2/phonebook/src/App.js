@@ -14,9 +14,9 @@ const App = () => {
   const [isError, setIsError] = useState(false);
 
   const hook = () => {
-    personService.getAllPersons().then((people) => {
-      setPersons(people);
-      console.log('people loaded', people.length, 'people');
+    personService.getAllPersons().then((persons) => {
+      setPersons(persons);
+      console.log('people loaded', persons.length, 'people');
     });
   };
 
@@ -42,6 +42,7 @@ const App = () => {
       };
       personService.addNewPerson(makePerson).then((person) => {
         setPersons(persons.concat(person));
+        console.log(persons);
         setNewName('');
         setNewNumber('');
         setIsError(false);
