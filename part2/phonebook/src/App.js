@@ -25,7 +25,7 @@ const App = () => {
   const addNewName = (event) => {
     event.preventDefault();
     let exists = false;
-    let id = 0;
+    let id;
 
     for (const person of persons) {
       if (person.name === newName) {
@@ -38,11 +38,9 @@ const App = () => {
       const makePerson = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
       };
       personService.addNewPerson(makePerson).then((person) => {
         setPersons(persons.concat(person));
-        console.log(persons);
         setNewName('');
         setNewNumber('');
         setIsError(false);
@@ -66,6 +64,7 @@ const App = () => {
               )
             );
             setMessage(`Changed ${updatedPerson.name}'s number`);
+            setTimeout(() => setMessage(null), 4000);
             setNewName('');
             setNewNumber('');
           })
@@ -101,7 +100,7 @@ const App = () => {
     personService.removePerson(id);
     setPersons(
       persons.filter((person) => {
-        return person.id !== parseInt(id);
+        return person.id !== id;
       })
     );
   };
