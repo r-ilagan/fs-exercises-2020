@@ -5,8 +5,9 @@ require('dotenv').config();
 const Person = require('./models/person');
 
 const app = express();
-
+/* eslint-disable */
 morgan.token('body', (req, res) => {
+  /* eslint-enable */
   return JSON.stringify(req.body);
 });
 
@@ -79,7 +80,9 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
+    /* eslint-disable */
     .then((result) => res.status(204).end())
+    /* eslint-enable */
     .catch((error) => next(error));
 });
 

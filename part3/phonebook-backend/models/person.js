@@ -9,7 +9,9 @@ const url = process.env.MONGODB_URI;
 
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  /* eslint-disable */
   .then((result) => {
+    /* eslint-enable */
     console.log('connected to MongoDB:', url);
   })
   .catch((error) => {

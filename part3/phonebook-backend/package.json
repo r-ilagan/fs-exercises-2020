@@ -9,11 +9,13 @@
     "deploy": "git push heroku master",
     "dev": "nodemon index.js",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "author": "Rach Ilagan",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^6.8.0",
     "nodemon": "^2.0.3"
   },
   "dependencies": {
