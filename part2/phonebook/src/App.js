@@ -39,14 +39,22 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      personService.addNewPerson(makePerson).then((person) => {
-        setPersons(persons.concat(person));
-        setNewName('');
-        setNewNumber('');
-        setIsError(false);
-        setMessage(`Added ${person.name}`);
-        setTimeout(() => setMessage(null), 4000);
-      });
+
+      personService
+        .addNewPerson(makePerson)
+        .then((createdPerson) => {
+          setPersons(persons.concat(createdPerson));
+          setNewName('');
+          setNewNumber('');
+          setIsError(false);
+          setMessage(`Added ${createdPerson.name}`);
+          setTimeout(() => setMessage(null), 5000);
+        })
+        .catch((error) => {
+          setIsError(true);
+          setMessage(error.response.data.error);
+          setTimeout(() => setMessage(null), 6000);
+        });
     } else {
       if (
         window.confirm(
@@ -64,7 +72,7 @@ const App = () => {
               )
             );
             setMessage(`Changed ${updatedPerson.name}'s number`);
-            setTimeout(() => setMessage(null), 4000);
+            setTimeout(() => setMessage(null), 5000);
             setNewName('');
             setNewNumber('');
           })
@@ -73,7 +81,7 @@ const App = () => {
             setMessage(
               `Information of ${personToUpdate.name} has already been removed from the server`
             );
-            setTimeout(() => setMessage(null), 4000);
+            setTimeout(() => setMessage(null), 5000);
             setNewName('');
             setNewNumber('');
             setPersons(
