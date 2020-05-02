@@ -1,5 +1,5 @@
-const info = (port) => {
-  console.log(`Server running on port ${port}`);
+const info = (info) => {
+  console.log(info);
 };
 
 module.exports = {
