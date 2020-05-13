@@ -8,12 +8,39 @@ blogRouter.get('/', (request, response) => {
   });
 });
 
-blogRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body);
+blogRouter.post('/', async (request, response) => {
+  const body = request.body;
+  console.log(body);
 
-  blog.save().then((result) => {
-    response.status(201).json(result);
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes === undefined ? 0 : body.likes,
   });
+
+  const savedBlog = await blog.save();
+  response.json(savedBlog.toJSON());
+});
+
+blogRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id);
+  response.status(204).end();
+});
+
+blogRouter.put('/:id', async (request, response) => {
+  const body = request.body;
+
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+  };
+
+  const foundBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  });
+  response.json(foundBlog.toJSON());
 });
 
 module.exports = blogRouter;
