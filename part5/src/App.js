@@ -3,6 +3,7 @@ import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -32,8 +33,8 @@ const App = () => {
   };
 
   const handleLogin = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
       const user = await loginService.login({
         username,
         password,
@@ -63,10 +64,10 @@ const App = () => {
           {`${user.name} is logged in`}
           <button onClick={logout}>logout</button>
         </p>
-        <div>
+        <Togglable buttonLabel="new note">
           <h2>create new</h2>
           <BlogForm blogs={blogs} setBlogs={setBlogs} notifyWith={notifyWith} />
-        </div>
+        </Togglable>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
