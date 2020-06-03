@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Blog = ({ blog, addLike }) => {
+const Blog = ({ blog, currentUser, addLike, removeBlog }) => {
   const [view, setView] = useState(false);
 
   const blogStyle = {
@@ -23,6 +23,12 @@ const Blog = ({ blog, addLike }) => {
     await addLike(blog);
   };
 
+  const handleRemove = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      removeBlog(blog.id);
+    }
+  };
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}{' '}
@@ -33,6 +39,11 @@ const Blog = ({ blog, addLike }) => {
         {`likes ${blog.likes}`} <button onClick={updateLikes}>like</button>
         <br />
         {blog.author}
+        {currentUser === blog.user.username ? (
+          <div>
+            <button onClick={handleRemove}>remove</button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
