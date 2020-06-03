@@ -67,8 +67,6 @@ const App = () => {
   };
 
   const updateLikes = async (blog) => {
-    console.log(blog);
-
     const updatedBlog = await blogService.update(blog.id, {
       ...blog,
       user: blog.user.id,
@@ -77,6 +75,16 @@ const App = () => {
     setBlogs(
       blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
     );
+  };
+
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.remove(id);
+      notifyWith('Successfully deleted blog');
+      setBlogs(blogs.filter((blog) => blog.id !== id));
+    } catch (exception) {
+      notifyWith('Could not delete blog', 'error');
+    }
   };
 
   const logout = () => {
@@ -98,7 +106,13 @@ const App = () => {
           <BlogForm createBlog={addBlog} />
         </Togglable>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} addLike={updateLikes} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            currentUser={user.username}
+            addLike={updateLikes}
+            removeBlog={deleteBlog}
+          />
         ))}
       </>
     );
