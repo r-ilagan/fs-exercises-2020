@@ -22,7 +22,6 @@ blogRouter.post('/', async (request, response) => {
   }
 
   const user = await User.findById(request.token.id);
-  console.log(body, request.token, user);
 
   const blog = new Blog({
     title: body.title,
@@ -40,16 +39,24 @@ blogRouter.post('/', async (request, response) => {
 });
 
 blogRouter.delete('/:id', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!request.token || !decodedToken.id) {
+  if (!request.token) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
 
-  const blog = await Blog.findById(request.params.id);
-  if (blog.user.toString() === decodedToken.id.toString()) {
-    await blog.remove();
-    await blog.save();
+  const blog = await Blog.findByIdAndRemove(request.params.id);
+
+  if (!blog) {
+    return response.status(404).json({
+      error: 'blog not found',
+    });
   }
+
+  if (blog.user.toString() !== request.token.id.toString()) {
+    return response.status(401).json({
+      error: 'not authorised',
+    });
+  }
+
   response.status(204).end();
 });
 
