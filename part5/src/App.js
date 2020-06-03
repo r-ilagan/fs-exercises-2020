@@ -62,15 +62,19 @@ const App = () => {
     } catch (exception) {
       notifyWith('Title, author and url are required', 'error');
     }
-    // blogService
-    //   .create(blog)
-    //   .then((returnedBlog) => {
-    //     notifyWith(
-    //       `A new blog ${returnedBlog.title} by ${returnedBlog.author} has beed added`
-    //     );
-    //     setBlogs(blogs.concat(returnedBlog));
-    //   })
-    //   .catch((e) => notifyWith('Title, author and url are required', 'error'));
+  };
+
+  const updateLikes = async (blog) => {
+    console.log(blog);
+
+    const updatedBlog = await blogService.update(blog.id, {
+      ...blog,
+      user: blog.user.id,
+      likes: blog.likes + 1,
+    });
+    setBlogs(
+      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+    );
   };
 
   const logout = () => {
@@ -92,7 +96,7 @@ const App = () => {
           <BlogForm createBlog={addBlog} />
         </Togglable>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} addLike={updateLikes} />
         ))}
       </>
     );
