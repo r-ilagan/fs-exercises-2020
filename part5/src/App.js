@@ -21,7 +21,9 @@ const App = () => {
   useEffect(() => {
     const user = window.localStorage.getItem('loggedInUser');
     if (user) {
-      setUser(JSON.parse(user));
+      const loggedUser = JSON.parse(user);
+      setUser(loggedUser);
+      blogService.setToken(loggedUser.token);
     }
   }, []);
 
@@ -50,6 +52,27 @@ const App = () => {
     }
   };
 
+  const addBlog = async (blog) => {
+    try {
+      const returnedBlog = await blogService.create(blog);
+      notifyWith(
+        `A new blog ${returnedBlog.title} by ${returnedBlog.author} has beed added`
+      );
+      setBlogs(blogs.concat(returnedBlog));
+    } catch (exception) {
+      notifyWith('Title, author and url are required', 'error');
+    }
+    // blogService
+    //   .create(blog)
+    //   .then((returnedBlog) => {
+    //     notifyWith(
+    //       `A new blog ${returnedBlog.title} by ${returnedBlog.author} has beed added`
+    //     );
+    //     setBlogs(blogs.concat(returnedBlog));
+    //   })
+    //   .catch((e) => notifyWith('Title, author and url are required', 'error'));
+  };
+
   const logout = () => {
     window.localStorage.clear();
     setUser(null);
@@ -66,7 +89,7 @@ const App = () => {
         </p>
         <Togglable buttonLabel="new note">
           <h2>create new</h2>
-          <BlogForm blogs={blogs} setBlogs={setBlogs} notifyWith={notifyWith} />
+          <BlogForm createBlog={addBlog} />
         </Togglable>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
