@@ -33,16 +33,23 @@ const Blog = ({ blog, currentUser, addLike, removeBlog }) => {
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}{' '}
-      <button onClick={handleClick}>{showInfo}</button>
+      <button onClick={handleClick} className={`${showInfo}-button`}>
+        {showInfo}
+      </button>
       <div style={displayInfo}>
         {blog.url}
         <br />
-        {`likes ${blog.likes}`} <button onClick={updateLikes}>like</button>
+        {`likes ${blog.likes}`}{' '}
+        <button className="like-button" onClick={updateLikes}>
+          like
+        </button>
         <br />
         {blog.author}
         {currentUser === blog.user.username ? (
           <div>
-            <button onClick={handleRemove}>remove</button>
+            <button className="remove-button" onClick={handleRemove}>
+              remove
+            </button>
           </div>
         ) : null}
       </div>
