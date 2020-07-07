@@ -9,19 +9,21 @@ const reducer = (state = '', { type, data }) => {
   }
 };
 
-export const setMessage = (message) => {
-  return {
-    type: 'SET',
-    data: {
-      message,
-    },
+export const setMessage = (message, time) => {
+  return dispatch => {
+    dispatch({
+      type: 'SET',
+      data: {
+        message,
+      },
+    });
+    setTimeout(() => dispatch(clearMessage()), time * 1000);
   };
 };
 
 export const clearMessage = () => {
   return {
     type: 'CLEAR',
-    data: {},
   };
 };
 

@@ -32,12 +32,12 @@
     },
     {
       "content": "Guski the plop",
-      "votes": 3,
+      "votes": 20,
       "id": "DOgvmOk"
     },
     {
       "content": "Rocky the plop",
-      "votes": 2,
+      "votes": 5,
       "id": "Zaa46lB"
     },
     {
@@ -47,7 +47,7 @@
     },
     {
       "content": "The new anecdote after redux-thunk",
-      "votes": 0,
+      "votes": 1,
       "id": "1FAS3kH"
     }
   ]
