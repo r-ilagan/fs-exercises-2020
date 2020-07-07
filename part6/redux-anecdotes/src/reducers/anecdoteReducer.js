@@ -1,12 +1,4 @@
-const getId = () => (100000 * Math.random()).toFixed(0);
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0,
-  };
-};
+import anecdoteService from '../services/anecdote';
 
 const reducer = (state = [], action) => {
   console.log('state now: ', state);
@@ -30,29 +22,37 @@ const reducer = (state = [], action) => {
   }
 };
 
-export const vote = (id) => {
-  return {
-    type: 'VOTE',
-    data: { id },
-  };
+export const vote = (anecdote) => {
+  return async dispatch => {
+    await anecdoteService.vote(anecdote);
+    dispatch({
+      type: 'VOTE',
+      data: { 
+        id: anecdote.id 
+      },
+    }
+  )};
 };
 
 export const createAnecdote = (anecdote) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: {
-      content: anecdote,
-      id: getId(),
-      votes: 0,
-    },
-  };
+  return async dispatch => {
+    await anecdoteService.createAnecdote(anecdote);
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: {
+        content: anecdote,
+        votes: 0,
+      },
+  })};
 };
 
-export const initAnecdotes = (data) => {
-  return {
+export const initAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAnecdotes();
+    dispatch({
     type: 'INIT',
-    data, 
-  }
+    data: anecdotes, 
+  })}
 }
 
 export default reducer;
