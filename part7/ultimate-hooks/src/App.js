@@ -20,10 +20,25 @@ const useField = (type) => {
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
 
-  // ...
+  let token = null
 
-  const create = (resource) => {
-    // ...
+  const setToken = newToken => {
+    token = `bearer ${newToken}`
+  }
+
+  useEffect(() => {
+    axios.get(baseUrl)
+      .then(response => response.data)
+      .then(resource => setResources(resource));
+  }, [baseUrl])
+
+  const create = async (resource) => {
+    const config = {
+      headers: { Authorization: token },
+    }
+  
+    const response = await axios.post(baseUrl, resource, config)
+    return response.data
   }
 
   const service = {
